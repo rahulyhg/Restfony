@@ -17,42 +17,60 @@ class BundleElements
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Bundles")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bundles", inversedBy="product")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $bundle_id;
+    private $bundle;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Products", inversedBy="bundleElements", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bundles", inversedBy="bundleElements")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $product_id;
+    private $relation;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Products", inversedBy="bundleElements")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $product;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getBundleId(): ?Bundles
+    public function getBundle(): ?Bundles
     {
-        return $this->bundle_id;
+        return $this->bundle;
     }
 
-    public function setBundleId(?Bundles $bundle_id): self
+    public function setBundle(?Bundles $bundle): self
     {
-        $this->bundle_id = $bundle_id;
+        $this->bundle = $bundle;
 
         return $this;
     }
 
-    public function getProductId(): ?Products
+    public function getRelation(): ?Bundles
     {
-        return $this->product_id;
+        return $this->relation;
     }
 
-    public function setProductId(Products $product_id): self
+    public function setRelation(?Bundles $relation): self
     {
-        $this->product_id = $product_id;
+        $this->relation = $relation;
+
+        return $this;
+    }
+
+    public function getProduct(): ?Products
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Products $product): self
+    {
+        $this->product = $product;
 
         return $this;
     }

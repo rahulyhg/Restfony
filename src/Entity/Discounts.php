@@ -17,20 +17,20 @@ class Discounts
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Products", inversedBy="discounts", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Products", inversedBy="discount", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $product_id;
+    private $product;
 
     /**
      * @ORM\Column(type="float")
      */
-    private $discount_amount;
+    private $amount;
 
     /**
-     * @ORM\Column(type="string", length=7)
+     * @ORM\Column(type="string", length=10)
      */
-    private $discount_type;
+    private $type;
 
     /**
      * @ORM\Column(type="datetime")
@@ -47,38 +47,38 @@ class Discounts
         return $this->id;
     }
 
-    public function getProductId(): ?Products
+    public function getProduct(): ?Products
     {
-        return $this->product_id;
+        return $this->product;
     }
 
-    public function setProductId(Products $product_id): self
+    public function setProduct(Products $product): self
     {
-        $this->product_id = $product_id;
+        $this->product = $product;
 
         return $this;
     }
 
-    public function getDiscountAmount(): ?float
+    public function getAmount(): ?float
     {
-        return $this->discount_amount;
+        return $this->amount;
     }
 
-    public function setDiscountAmount(float $discount_amount): self
+    public function setAmount(float $amount): self
     {
-        $this->discount_amount = $discount_amount;
+        $this->amount = $amount;
 
         return $this;
     }
 
-    public function getDiscountType(): ?string
+    public function getType(): ?string
     {
-        return $this->discount_type;
+        return $this->type;
     }
 
-    public function setDiscountType(string $discount_type): self
+    public function setType(string $type): self
     {
-        $this->discount_type = $discount_type;
+        $this->type = $type;
 
         return $this;
     }
