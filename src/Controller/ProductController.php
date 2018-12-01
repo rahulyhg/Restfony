@@ -119,7 +119,7 @@ class ProductController extends AbstractController{
         }
 
         return $this->json([
-            'message' => 'Successfully Updated',
+            'message' => 'Successfully Fetched',
             'data' => $result,
         ]);
     }

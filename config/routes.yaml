@@ -56,3 +56,8 @@ delete_bundle:
     path: /bundle/{bundleId}
     controller: App\Controller\BundleController::delete
     methods:  [DELETE]
+
+place_order:
+    path: /order
+    controller: App\Controller\OrderController::place
+    methods:  [POST]
