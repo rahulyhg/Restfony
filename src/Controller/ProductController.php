@@ -60,7 +60,7 @@ class ProductController extends AbstractController{
     public function list(){
         $entityManager = $this->getDoctrine()->getManager();
         $qb = $entityManager->createQueryBuilder();
-        $qb->select('product.name, product.price, discount.amount, discount.type')
+        $qb->select('product.name, product.price, discount.amount as discount_amount, discount.type as discount_type')
             ->from('App\Entity\Products', 'product')
             ->leftJoin(
                 'App\Entity\Discounts', 'discount', 
@@ -72,6 +72,55 @@ class ProductController extends AbstractController{
         return $this->json([
             'message' => 'Successfully Updated',
             'data' => $results,
+        ]);
+    }
+
+    public function catelog(){
+        $entityManager = $this->getDoctrine()->getManager();
+        $qb = $entityManager->createQueryBuilder();
+        $qb->select('product.id, product.name, product.price, discount.amount as discount_amount, discount.type as discount_type, \'PRODUCTS\' as type')
+            ->from('App\Entity\Products', 'product')
+            ->leftJoin(
+                'App\Entity\Discounts', 'discount', 
+                \Doctrine\ORM\Query\Expr\Join::WITH, 
+                'product.id = discount.product')
+            ->orderBy('product.created_at', 'DESC');
+        $query = $qb->getQuery();
+        $result = $query->getResult();
+          
+        $qb = $entityManager->createQueryBuilder();
+        $qb->select('bundle.id,bundle.name,bundle.price, product.name as p_name,product.id as p_id')
+            ->from('App\Entity\BundleElements', 'ref')
+            ->leftJoin(
+                'App\Entity\Bundles', 'bundle', 
+                \Doctrine\ORM\Query\Expr\Join::WITH, 
+                'ref.bundle = bundle.id')
+            ->leftJoin(
+                'App\Entity\Products', 'product', 
+                \Doctrine\ORM\Query\Expr\Join::WITH, 
+                'ref.product = product.id')
+            ->orderBy('bundle.created_at', 'ASC');
+        $query = $qb->getQuery();
+        $queryResults = $query->getResult();
+        foreach($queryResults as $qr){
+            $productDetails = array("name"=>$qr['p_name'], "id"=>$qr['p_id']);
+            $key = array_search($qr['name'], array_column($result, 'name'));
+            if(gettype($key)==="integer"){
+                array_push($result[$key]['products'], $productDetails);
+            }else{
+                array_push($result, array(
+                    "id"=>$qr['id'],
+                    "name"=>$qr['name'],
+                    "price"=>$qr['price'],
+                    "products"=>[$productDetails],
+                    "type" => "BUNDLES"
+                ));
+            }
+        }
+
+        return $this->json([
+            'message' => 'Successfully Updated',
+            'data' => $result,
         ]);
     }
 

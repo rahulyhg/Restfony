@@ -18,6 +18,11 @@ delete_product:
     path: /product/{productId}
     controller: App\Controller\ProductController::delete
     methods:  [DELETE]
+product_catelog:
+    path: /catelog
+    controller: App\Controller\ProductController::catelog
+    methods:  [GET]
+
 create_discount:
     path: /discount
     controller: App\Controller\DiscountController::create
