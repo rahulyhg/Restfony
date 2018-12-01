@@ -1,3 +1,4 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+create_product:
+    path: /product
+    controller: App\Controller\ProductController::create
+    methods:  [POST]
