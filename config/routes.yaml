@@ -18,3 +18,19 @@ delete_product:
     path: /product/{productId}
     controller: App\Controller\ProductController::delete
     methods:  [DELETE]
+create_discount:
+    path: /discount
+    controller: App\Controller\DiscountController::create
+    methods:  [POST]
+modify_discount:
+    path: /discount/{discountId}
+    controller: App\Controller\DiscountController::update
+    methods:  [PUT]
+list_discount:
+    path: /discounts
+    controller: App\Controller\DiscountController::list
+    methods:  [GET]
+delete_discount:
+    path: /discount/{discountId}
+    controller: App\Controller\DiscountController::delete
+    methods:  [DELETE]
