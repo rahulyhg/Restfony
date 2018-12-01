@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,14 +39,19 @@ class Products
     private $updated_at;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Discounts", mappedBy="product_id", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="App\Entity\Discounts", mappedBy="product", cascade={"persist", "remove"})
      */
-    private $discounts;
+    private $discount;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\BundleElements", mappedBy="product_id", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="App\Entity\BundleElements", mappedBy="product", orphanRemoval=true)
      */
     private $bundleElements;
+
+    public function __construct()
+    {
+        $this->bundleElements = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -99,35 +106,49 @@ class Products
         return $this;
     }
 
-    public function getDiscounts(): ?Discounts
+    public function getDiscount(): ?Discounts
     {
-        return $this->discounts;
+        return $this->discount;
     }
 
-    public function setDiscounts(Discounts $discounts): self
+    public function setDiscount(Discounts $discount): self
     {
-        $this->discounts = $discounts;
+        $this->discount = $discount;
 
         // set the owning side of the relation if necessary
-        if ($this !== $discounts->getProductId()) {
-            $discounts->setProductId($this);
+        if ($this !== $discount->getProduct()) {
+            $discount->setProduct($this);
         }
 
         return $this;
     }
 
-    public function getBundleElements(): ?BundleElements
+    /**
+     * @return Collection|BundleElements[]
+     */
+    public function getBundleElements(): Collection
     {
         return $this->bundleElements;
     }
 
-    public function setBundleElements(BundleElements $bundleElements): self
+    public function addBundleElement(BundleElements $bundleElement): self
     {
-        $this->bundleElements = $bundleElements;
+        if (!$this->bundleElements->contains($bundleElement)) {
+            $this->bundleElements[] = $bundleElement;
+            $bundleElement->setProduct($this);
+        }
 
-        // set the owning side of the relation if necessary
-        if ($this !== $bundleElements->getProductId()) {
-            $bundleElements->setProductId($this);
+        return $this;
+    }
+
+    public function removeBundleElement(BundleElements $bundleElement): self
+    {
+        if ($this->bundleElements->contains($bundleElement)) {
+            $this->bundleElements->removeElement($bundleElement);
+            // set the owning side to null (unless already changed)
+            if ($bundleElement->getProduct() === $this) {
+                $bundleElement->setProduct(null);
+            }
         }
 
         return $this;

@@ -39,7 +39,7 @@ class Sales
     private $created_at;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\SalesItems", mappedBy="sales_id", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\SalesItems", mappedBy="sales", orphanRemoval=true)
      */
     private $salesItems;
 
@@ -113,7 +113,7 @@ class Sales
     {
         if (!$this->salesItems->contains($salesItem)) {
             $this->salesItems[] = $salesItem;
-            $salesItem->setSalesId($this);
+            $salesItem->setSales($this);
         }
 
         return $this;
@@ -124,8 +124,8 @@ class Sales
         if ($this->salesItems->contains($salesItem)) {
             $this->salesItems->removeElement($salesItem);
             // set the owning side to null (unless already changed)
-            if ($salesItem->getSalesId() === $this) {
-                $salesItem->setSalesId(null);
+            if ($salesItem->getSales() === $this) {
+                $salesItem->setSales(null);
             }
         }
 

@@ -2,3 +2,19 @@ create_product:
     path: /product
     controller: App\Controller\ProductController::create
     methods:  [POST]
+modify_product:
+    path: /product/{productId}
+    controller: App\Controller\ProductController::update
+    methods:  [PUT]
+list_product:
+    path: /products
+    controller: App\Controller\ProductController::list
+    methods:  [GET]
+product_details:
+    path: /product/{productId}
+    controller: App\Controller\ProductController::details
+    methods:  [GET]
+delete_product:
+    path: /product/{productId}
+    controller: App\Controller\ProductController::delete
+    methods:  [DELETE]

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -35,6 +37,22 @@ class Bundles
      * @ORM\Column(type="datetime")
      */
     private $updated_at;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BundleElements", mappedBy="bundle", orphanRemoval=true)
+     */
+    private $product;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BundleElements", mappedBy="relation", orphanRemoval=true)
+     */
+    private $bundleElements;
+
+    public function __construct()
+    {
+        $this->product = new ArrayCollection();
+        $this->bundleElements = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -85,6 +103,68 @@ class Bundles
     public function setUpdatedAt(\DateTimeInterface $updated_at): self
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BundleElements[]
+     */
+    public function getProduct(): Collection
+    {
+        return $this->product;
+    }
+
+    public function addProduct(BundleElements $product): self
+    {
+        if (!$this->product->contains($product)) {
+            $this->product[] = $product;
+            $product->setBundle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(BundleElements $product): self
+    {
+        if ($this->product->contains($product)) {
+            $this->product->removeElement($product);
+            // set the owning side to null (unless already changed)
+            if ($product->getBundle() === $this) {
+                $product->setBundle(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BundleElements[]
+     */
+    public function getBundleElements(): Collection
+    {
+        return $this->bundleElements;
+    }
+
+    public function addBundleElement(BundleElements $bundleElement): self
+    {
+        if (!$this->bundleElements->contains($bundleElement)) {
+            $this->bundleElements[] = $bundleElement;
+            $bundleElement->setRelation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBundleElement(BundleElements $bundleElement): self
+    {
+        if ($this->bundleElements->contains($bundleElement)) {
+            $this->bundleElements->removeElement($bundleElement);
+            // set the owning side to null (unless already changed)
+            if ($bundleElement->getRelation() === $this) {
+                $bundleElement->setRelation(null);
+            }
+        }
 
         return $this;
     }

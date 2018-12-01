@@ -20,112 +20,63 @@ class SalesItems
      * @ORM\ManyToOne(targetEntity="App\Entity\Sales", inversedBy="salesItems")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $sales_id;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Products")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $item_id;
+    private $sales;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $item_quantity;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $item_price;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $item_discount;
-
-    /**
-     * @ORM\Column(type="float")
-     */
-    private $item_total;
+    private $item_id;
 
     /**
      * @ORM\Column(type="string", length=10)
      */
     private $item_type;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $quantity;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $price;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $discounts;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $total;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getSalesId(): ?Sales
+    public function getSales(): ?Sales
     {
-        return $this->sales_id;
+        return $this->sales;
     }
 
-    public function setSalesId(?Sales $sales_id): self
+    public function setSales(?Sales $sales): self
     {
-        $this->sales_id = $sales_id;
+        $this->sales = $sales;
 
         return $this;
     }
 
-    public function getItemId(): ?Products
+    public function getItemId(): ?int
     {
         return $this->item_id;
     }
 
-    public function setItemId(?Products $item_id): self
+    public function setItemId(int $item_id): self
     {
         $this->item_id = $item_id;
-
-        return $this;
-    }
-
-    public function getItemQuantity(): ?int
-    {
-        return $this->item_quantity;
-    }
-
-    public function setItemQuantity(int $item_quantity): self
-    {
-        $this->item_quantity = $item_quantity;
-
-        return $this;
-    }
-
-    public function getItemPrice(): ?float
-    {
-        return $this->item_price;
-    }
-
-    public function setItemPrice(float $item_price): self
-    {
-        $this->item_price = $item_price;
-
-        return $this;
-    }
-
-    public function getItemDiscount(): ?float
-    {
-        return $this->item_discount;
-    }
-
-    public function setItemDiscount(float $item_discount): self
-    {
-        $this->item_discount = $item_discount;
-
-        return $this;
-    }
-
-    public function getItemTotal(): ?float
-    {
-        return $this->item_total;
-    }
-
-    public function setItemTotal(float $item_total): self
-    {
-        $this->item_total = $item_total;
 
         return $this;
     }
@@ -138,6 +89,54 @@ class SalesItems
     public function setItemType(string $item_type): self
     {
         $this->item_type = $item_type;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getDiscounts(): ?float
+    {
+        return $this->discounts;
+    }
+
+    public function setDiscounts(float $discounts): self
+    {
+        $this->discounts = $discounts;
+
+        return $this;
+    }
+
+    public function getTotal(): ?float
+    {
+        return $this->total;
+    }
+
+    public function setTotal(float $total): self
+    {
+        $this->total = $total;
 
         return $this;
     }
