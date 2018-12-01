@@ -23,12 +23,6 @@ class BundleElements
     private $bundle;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Bundles", inversedBy="bundleElements")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $relation;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Products", inversedBy="bundleElements")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -47,18 +41,6 @@ class BundleElements
     public function setBundle(?Bundles $bundle): self
     {
         $this->bundle = $bundle;
-
-        return $this;
-    }
-
-    public function getRelation(): ?Bundles
-    {
-        return $this->relation;
-    }
-
-    public function setRelation(?Bundles $relation): self
-    {
-        $this->relation = $relation;
 
         return $this;
     }

@@ -34,3 +34,20 @@ delete_discount:
     path: /discount/{discountId}
     controller: App\Controller\DiscountController::delete
     methods:  [DELETE]
+
+create_bundle:
+    path: /bundle
+    controller: App\Controller\BundleController::create
+    methods:  [POST]
+update_bundle:
+    path: /bundle/{bundleId}
+    controller: App\Controller\BundleController::update
+    methods:  [PUT]
+bundle_list:
+    path: /bundles
+    controller: App\Controller\BundleController::list
+    methods:  [GET]
+delete_bundle:
+    path: /bundle/{bundleId}
+    controller: App\Controller\BundleController::delete
+    methods:  [DELETE]

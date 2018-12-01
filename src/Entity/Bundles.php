@@ -44,7 +44,7 @@ class Bundles
     private $product;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\BundleElements", mappedBy="relation", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\BundleElements", mappedBy="bundle", orphanRemoval=true)
      */
     private $bundleElements;
 
@@ -150,7 +150,6 @@ class Bundles
     {
         if (!$this->bundleElements->contains($bundleElement)) {
             $this->bundleElements[] = $bundleElement;
-            $bundleElement->setRelation($this);
         }
 
         return $this;
@@ -160,10 +159,6 @@ class Bundles
     {
         if ($this->bundleElements->contains($bundleElement)) {
             $this->bundleElements->removeElement($bundleElement);
-            // set the owning side to null (unless already changed)
-            if ($bundleElement->getRelation() === $this) {
-                $bundleElement->setRelation(null);
-            }
         }
 
         return $this;
