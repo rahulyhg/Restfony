@@ -17,12 +17,6 @@ class Discounts
     private $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="App\Entity\Products", inversedBy="discount", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $product;
-
-    /**
      * @ORM\Column(type="float")
      */
     private $amount;
@@ -42,21 +36,15 @@ class Discounts
      */
     private $updated_at;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Products")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $product;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getProduct(): ?Products
-    {
-        return $this->product;
-    }
-
-    public function setProduct(Products $product): self
-    {
-        $this->product = $product;
-
-        return $this;
     }
 
     public function getAmount(): ?float
@@ -106,4 +94,17 @@ class Discounts
 
         return $this;
     }
+
+    public function getProduct(): ?Products
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?Products $product): self
+    {
+        $this->product = $product;
+
+        return $this;
+    }
+
 }
