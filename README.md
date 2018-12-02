@@ -1,2 +1,2 @@
 # Restfony
-Simple REST API with Symfony 4.1
+Simple REST API with Symfony 4.2
