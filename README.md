@@ -1,5 +1,5 @@
 # Restfony 
-Simple REST interface built on Synfony 4.1
+Simple REST interface built on Symfony 4.1
 
 ------------
 
@@ -15,6 +15,7 @@ Download or Clone this repo
 ```
 git clone https://github.com/shuhailshuvo/Restfony.git
 ```
+
 Install Dependency
 
 ```
