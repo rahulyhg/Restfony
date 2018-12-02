@@ -22,7 +22,7 @@ Install Dependency
 composer install
 ```
 
-Configure Databse in `.env` file
+Configure Database in `.env` file
 
 ```
 DATABASE_URL="mysql://USER:PASS@HOST:PORT/DB"
