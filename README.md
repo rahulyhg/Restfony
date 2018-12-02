@@ -16,7 +16,7 @@ Download or Clone this repo
 git clone https://github.com/shuhailshuvo/Restfony.git
 ```
 
-Install Dependency
+Go to the `Restfony` directory and Install Dependency
 
 ```
 composer install
@@ -37,7 +37,7 @@ php bin/console doctrine:database:create
 Database Migration
 
 ```
-php bin/console doctrine: migrations: migrate
+php bin/console doctrine:migrations:migrate
 ```
 
 Run the API service
