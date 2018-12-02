@@ -1,5 +1,5 @@
 # Restfony 
-Simple REST interface built on Synfony 4.2
+Simple REST interface built on Synfony 4.1
 
 ------------
 
@@ -24,7 +24,13 @@ composer install
 Configure Databse in `.env` file
 
 ```
-DATABASE_URL="mysql://root:@127.0.0.1:3306/restfony"`
+DATABASE_URL="mysql://USER:PASS@HOST:PORT/DB"
+```
+
+Create Database
+
+```
+php bin/console doctrine:database:create
 ```
 
 Database Migration
