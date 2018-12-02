@@ -4,13 +4,11 @@ Simple REST interface built on Synfony 4.2
 ------------
 
 ### Features
-Feature  | 
-------------- | -------------
-RESTfull API  | Done
-JSON Response  |  Done
-HTTP Status  |  Done
-Exception Handling | Done
-Doctrine ORM |  Done
+* RESTfull API
+* JSON Response
+* HTTP Status
+* Exception Handling
+* Doctrine ORM
 
 ### Installation
 Download or Clone this repo
@@ -47,10 +45,8 @@ Download the Postman Collection
 
 
 ### TODO
-Feature  | 
-------------- | -------------
-Custom Validator  | -
-Custom Exception Handler  |  -
-Functional Testing | -
-JWT |  -
-CORS |  -
+* Custom Validator
+* Custom Exception Handler
+* Functional Testing
+* JWT
+* CORS
