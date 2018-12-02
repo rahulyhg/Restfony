@@ -28,17 +28,8 @@ class BundleController extends AbstractController{
             $entityManager->persist($bundle);
             $entityManager->flush();
 
-            foreach($requestData['products'] as $productId){
-                $product = $entityManager->getRepository(Products::class)->findOneById($productId);
-                if (!$product) 
-                    throw new \Exception("Invalid Product");
-                $bundleElement = new BundleElements();
-                $bundleElement
-                    ->setBundle($bundle)
-                    ->setProduct($product);
-                $entityManager->persist($bundleElement);
-                $entityManager->flush();
-            }
+            $this->createBundleElement($requestData['products']);
+            
             return $this->json([
                 'message' => 'Successfully Created',
                 'bundle_id' => $bundle->getId(),
@@ -55,6 +46,7 @@ class BundleController extends AbstractController{
         try{
             $request = new Request();
             $requestData = json_decode($request->getContent(), true);
+
             $entityManager = $this->getDoctrine()->getManager();
             $bundle = $entityManager->getRepository(Bundles::class)->findOneById($bundleId);
             if (!$bundle) 
@@ -64,32 +56,12 @@ class BundleController extends AbstractController{
                 $bundle->setName($requestData['name']);
 
             if(isset($requestData['price']))
-                $bundle->setPrice($requestData['price']);   
+                $bundle->setPrice($requestData['price']);
 
             $bundle->setUpdatedAt(new \DateTime());
             $entityManager->flush();
             $bundleId = $bundle->getId();
 
-            foreach($requestData['products'] as $productId){
-                $qb = $entityManager->createQueryBuilder();
-                $qb->delete('App\Entity\BundleElements', 'elm');
-                $qb->where('elm.product = :productId');
-                $qb->andWhere('elm.bundle = :bundleId');
-                $qb->setParameter('productId',$productId);
-                $qb->setParameter('bundleId',$bundleId);
-                $qb->getQuery()->execute();
-
-                $product = $entityManager->getRepository(Products::class)->findOneById($productId);
-                if (!$product)
-                    throw new \Exception("Invalid Product");
-
-                $bundleElement = new BundleElements();
-                $bundleElement
-                    ->setBundle($bundle)
-                    ->setProduct($product);
-                $entityManager->persist($bundleElement);
-                $entityManager->flush();
-            }
             return $this->json([
                 'message' => 'Successfully Updated',
                 'product_id' => $bundle->getId(),
@@ -162,5 +134,21 @@ class BundleController extends AbstractController{
             $response->setStatusCode(400);
             return $response;
         }
+    }
+
+    private function createBundleElement($products){
+        $entityManager = $this->getDoctrine()->getManager();
+        foreach($products as $productId){
+            $product = $entityManager->getRepository(Products::class)->findOneById($productId);
+            if (!$product) 
+                throw new \Exception("Invalid Product");
+            $bundleElement = new BundleElements();
+            $bundleElement
+                ->setBundle($bundle)
+                ->setProduct($product);
+            $entityManager->persist($bundleElement);
+            $entityManager->flush();
+        }
+        return;
     }
 }

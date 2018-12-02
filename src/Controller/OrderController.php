@@ -18,11 +18,12 @@ class OrderController extends AbstractController{
     public function place(){
         try{
             $request = new Request();
-            $requestData = json_decode($request->getContent(), true);
-            $entityManager = $this->getDoctrine()->getManager();
             $subTotal = 0;
             $totalDiscount = 0; 
             $orderItems = [];
+            $requestData = json_decode($request->getContent(), true);
+            $entityManager = $this->getDoctrine()->getManager();
+
             foreach($requestData['cart'] as $item){
                 $itemId = $item['id'];
                 if($item['type'] === "BUNDLES"){
@@ -30,12 +31,13 @@ class OrderController extends AbstractController{
                 }else{
                     $cartItems = $this->getProduct($itemId, $item['quantity']);
                 }
-                $itemName = $cartItems->name;
-                $itemPrice = $cartItems->price;
+                $itemName = $cartItems['name'];
+                $itemPrice = $cartItems['price'];
                 array_push($orderItems, $cartItems);
                 $totalDiscount += $cartItems['discount'];
                 $subTotal += $itemPrice * $item['quantity'];
             }
+
             $sales = new Sales();
             $sales
                 ->setSubTotal($subTotal)
@@ -44,6 +46,7 @@ class OrderController extends AbstractController{
                 ->setCreatedAt(new \DateTime());
             $entityManager->persist($sales);
             $entityManager->flush();
+
             foreach($orderItems as $item){
                 $salesItem = new SalesItems();
                 $salesItem
@@ -57,6 +60,7 @@ class OrderController extends AbstractController{
                 $entityManager->persist($salesItem);
                 $entityManager->flush();
             }
+
             return $this->json([
                 'message' => 'Thanks for your order',
                 'sub_total' => $subTotal,
@@ -66,7 +70,7 @@ class OrderController extends AbstractController{
             ]);
         }  
         catch(\Exception $e){
-            $response = new Response($this->json(["message"=>"Invalid Request"]));
+            $response = new Response($this->json(["message"=>$e->getMessage()]));
             $response->setStatusCode(400);
             return $response;
         }
@@ -84,6 +88,10 @@ class OrderController extends AbstractController{
                 ->setParameter('bundleId',$bundleId);
             $query = $qb->getQuery();
             $queryResults = $query->getResult();
+
+            if(!isset($queryResults[0]))
+                throw new \Exception("Invalid Bundle");
+
             $result = array( 
                 "id" => $bundleId,
                 "name" => $queryResults[0]['name'],
@@ -93,9 +101,11 @@ class OrderController extends AbstractController{
                 "discount"=>0, 
                 "products"=>[]
             );
+
             foreach($queryResults as $qr){
-                array_push($result['products'], array("name"=>$qr['p_name']));
+                array_push($result['products'], $qr['p_name']);
             }
+
             return $result;
         }  
         catch(\Exception $e){
@@ -117,11 +127,19 @@ class OrderController extends AbstractController{
                 ->orderBy('product.created_at', 'DESC');
             $query = $qb->getQuery();
             $results = $query->getResult();
+
             if(!isset($results[0])) 
                 throw new \Exception("Invalid Product");
-            $productDetails = array("id"=>$itemId,"name" => $results[0]['name'], "type"=>"PRODUCTS","price" => $results[0]['price'], "quantity"=> $quantity);
+
+            $productDetails = array(
+                "id"=>$itemId,
+                "name" => $results[0]['name'], 
+                "type"=>"PRODUCTS",
+                "price" => $results[0]['price'], 
+                "quantity"=> $quantity
+            );
             
-            if($results && $results[0]['discount_amount']){
+            if($results[0]['discount_amount']){
                 if($results[0]['discount_type'] === "PERCENT"){
                     $itemDiscount = (abs($results[0]['discount_amount']) * $results[0]['price'] / 100) * $quantity;
                 }else{
