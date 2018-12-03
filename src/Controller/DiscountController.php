@@ -135,7 +135,7 @@ class DiscountController extends AbstractController{
     }
 
     private function validateDiscountAmount($amount){
-        if(!isset($requestData['amount']) || $requestData['amount'] >=0)
+        if(!isset($amount) || $amount >=0)
             throw new \Exception("Discount Amount is required and should be less than 0");
     }
 }
