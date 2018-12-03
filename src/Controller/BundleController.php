@@ -28,7 +28,7 @@ class BundleController extends AbstractController{
             $entityManager->persist($bundle);
             $entityManager->flush();
 
-            $this->createBundleElement($requestData['products']);
+            $this->createBundleElement($requestData['products'],$bundle);
             
             return $this->json([
                 'message' => 'Successfully Created',
@@ -36,7 +36,7 @@ class BundleController extends AbstractController{
             ]);
         }
         catch(\Exception $e){
-            $response = new Response($this->json(["message"=>"Invalid Request"]));
+            $response = new Response($this->json(["message"=>$e->getmessage()]));
             $response->setStatusCode(400);
             return $response;
         }
@@ -136,7 +136,7 @@ class BundleController extends AbstractController{
         }
     }
 
-    private function createBundleElement($products){
+    private function createBundleElement($products,$bundle){
         $entityManager = $this->getDoctrine()->getManager();
         foreach($products as $productId){
             $product = $entityManager->getRepository(Products::class)->findOneById($productId);
