@@ -10,6 +10,11 @@ Simple REST interface built on Symfony 4.1
 * Exception Handling
 * Doctrine ORM
 
+### Requirements
+* Composer
+* PHP 7.2
+* MySQL
+
 ### Installation
 Download or Clone this repo
 ```
